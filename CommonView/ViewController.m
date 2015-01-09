@@ -13,6 +13,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelViewType;
 @property (weak, nonatomic) IBOutlet UIView *viewHolder;
 
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) UICollectionView *collectionView;
+
+@property (strong, nonatomic) NSMutableArray *dataSource;
+
 @end
 
 @implementation ViewController
@@ -20,6 +25,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    _dataSource = [NSMutableArray array];
+    [_dataSource addObject:@"A"];
+    [_dataSource addObject:@"B"];
+    [_dataSource addObject:@"C"];
+    [_dataSource addObject:@"D"];
+    [_dataSource addObject:@"E"];
+    [_dataSource addObject:@"F"];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,6 +45,41 @@
 
 - (IBAction)actionListClicked:(id)sender {
     _labelViewType.text = @"List View";
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, _viewHolder.frame.size.width, _viewHolder.frame.size.height)];
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        
+        [_viewHolder addSubview:_tableView];
+        [_tableView reloadData];
+    }
+}
+
+#pragma mark - TableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _dataSource.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    static NSString *cellIdentifier = @"TableCell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    cell.textLabel.text = [_dataSource objectAtIndex:indexPath.row];
+    
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {\
+    NSLog(@"TableView item selected -> %ld", (long)indexPath.row);
 }
 
 @end
