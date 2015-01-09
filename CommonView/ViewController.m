@@ -10,6 +10,9 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UILabel *labelViewType;
+@property (weak, nonatomic) IBOutlet UIView *viewHolder;
+
 @end
 
 @implementation ViewController
@@ -22,6 +25,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)actionGridClicked:(id)sender {
+    _labelViewType.text = @"Grid View";
+}
+
+- (IBAction)actionListClicked:(id)sender {
+    _labelViewType.text = @"List View";
 }
 
 @end
